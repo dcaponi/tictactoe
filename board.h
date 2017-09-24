@@ -11,11 +11,17 @@
 
 #include <stdio.h>
 #include <string>
+#include "player.h"
 
 class Board{
+    int size;
+    int moves;
     
     public:
-    
+        Board( int size );
+        void print();
+        void update( Player::Player* player );
+        Player* reportWinner();
     
 };
 

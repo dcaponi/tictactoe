@@ -7,12 +7,14 @@
 //
 
 #include <iostream>
+#include "player.h"
 
 using namespace std;
 
 void draw( char** board, int& size );
-bool move( char** board, char& player, int& size, int& moves );
-bool evaluateGame( char** board, int& size, int& moves, char& player, int& x, int& y );
+void initializePlayers();
+bool move( char** board, Player* player, int& size, int& moves );
+bool evaluateGame( char** board, int& size, int& moves, Player* player, int& x, int& y );
 
 int main(int argc, const char * argv[]) {
     
@@ -25,19 +27,30 @@ int main(int argc, const char * argv[]) {
     while( playAgain ){
         int boardSize = 0;
         int moves = 0;
+        string name;
         bool gameOver = false;
-        char player = 'X';
+        Player* currentPlayer;
         
-        cout << "Enter the size of board. Must be larger than 3: ";
+        cout << "Enter the size of board or any non-integer to quit. Must be larger than 3: ";
         cin >> boardSize;
         cout << endl;
         
         if( cin.fail() || boardSize < 3 ){
-            cout << "Invalid Input" << endl;
             return 1;
         }
         
         else{
+            cout << "Enter Player 1 Name: ";
+            cin >> name;
+            Player player1( name, 'X' );
+            cout << "Enter Player 2 Name: ";
+            cin >> name;
+            Player player2( name, 'O' );
+            cout << endl;
+            cout << "Player 1: " << player1.getName() << endl;
+            cout << "Player 2: " << player2.getName() << endl;
+            currentPlayer = &player1;
+            
             char* *board = new char*[boardSize];
             for( int i = 0; i < boardSize; i++ ){
                 board[i] = new char[boardSize];
@@ -49,8 +62,8 @@ int main(int argc, const char * argv[]) {
             draw ( board, boardSize );
             
             while( !gameOver ){
-                gameOver = move( board, player, boardSize, moves );
-                player = player == 'X' ? 'O' : 'X';
+                gameOver = move( board, currentPlayer, boardSize, moves );
+                currentPlayer = currentPlayer == &player1 ? &player2 : &player1;
             }
         
             for( int i = 0; i < boardSize; i ++ ){
@@ -68,48 +81,52 @@ int main(int argc, const char * argv[]) {
     return 0;
 }
 
-bool evaluateGame( char** board, int& size, int& moves, char& player, int& x, int& y ){
+void initialziePlayers(){
+    
+}
+
+bool evaluateGame( char** board, int& size, int& moves, Player* player, int& x, int& y ){
     bool gameOver = false;
     
     // Check Row
     for( int i = 0; i < size; i++ ){
-        if( board[x][i] != player ){
+        if( board[x][i] != player -> getToken() ){
             break;
         }
         if( i == size - 1){
-            cout << player << " Wins!\n";
+            cout << player -> getName() << " Wins!\n";
             gameOver = true;
         }
     }
     // Check Col
     for( int j = 0; j < size; j++ ){
-        if( board[j][y] != player ){
+        if( board[j][y] != player -> getToken() ){
             break;
         }
         if( j == size - 1){
-            cout << player << " Wins!\n";
+            cout << player -> getName() << " Wins!\n";
             gameOver = true;
         }
     }
     
     // Check /
     for( int j = size - 1; j >= 0; j -- ){
-        if( board[(size - 1) - j][j] != player ){
+        if( board[(size - 1) - j][j] != player -> getToken() ){
             break;
         }
         if( j == 0 ){
-            cout << player << " Wins!\n";
+            cout << player -> getName() << " Wins!\n";
             gameOver = true;
         }
     }
     
     // Check "\"
     for( int i = 0; i < size; i++ ){
-        if( board[i][i] != player ){
+        if( board[i][i] != player -> getToken() ){
             break;
         }
         if( i == size - 1 ){
-            cout << player << " Wins!\n";
+            cout << player -> getName() << " Wins!\n";
             gameOver = true;
         }
     }
@@ -134,12 +151,12 @@ void draw( char** board, int& size ){
     }
 }
 
-bool move( char** board, char& player, int& size, int& moves ){
+bool move( char** board, Player* player, int& size, int& moves ){
     bool turnOver = false;
     int maxEntry = size - 1;
     int x, y;
     
-    cout << "Player " << player << ", put in (x, y) coords: ";
+    cout << "Player " << player -> getName() << ", put in (x, y) coords: ";
     cin >> x >> y;
     cout << endl;
     
@@ -155,7 +172,7 @@ bool move( char** board, char& player, int& size, int& moves ){
             cout << endl;
         }
         else{
-            board[x][y] = player;
+            board[x][y] = player -> getToken();
             turnOver = true;
         }
     }
