@@ -14,14 +14,17 @@
 
 class Player{
     
-    std::string name;
-    char token;
+    std::string m_name;
+    char m_token;
     int last_x;
     int last_y;
     
     public:
-    
-    
+        Player( std::string const& name, char const& token );
+        void setMove( int x, int y );
+        int* getLastMove();
+        char getToken();
+        std::string getName();
 };
 
 #endif /* player_h */
