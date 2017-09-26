@@ -11,11 +11,21 @@
 
 #include <stdio.h>
 #include <string>
+#include "player.h"
 
 class Board{
+    int m_size;
+    int m_moves;
+    char* *board;
     
     public:
-    
+        Board( int size );
+        char getCharacter( int x, int y );
+        int  getSize();
+        void draw();
+        void update( Player* player );
+        void destroyBoard();
+        bool computeWinner( Player* currentPlayer );
     
 };
 
