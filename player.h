@@ -20,7 +20,7 @@ class Player{
     int last_y;
     
     public:
-        Player( std::string const& name, char const& token );
+        Player( char const& token );
         void setMove( int x, int y );
         int* getLastMove();
         char getToken();
