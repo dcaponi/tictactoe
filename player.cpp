@@ -12,9 +12,11 @@
 
 using namespace std;
 
-Player::Player( std::string const& name, char const& token ){
-    m_name = name;
-    m_token = token;
+Player::Player( char const& token ){
+	m_token = token;
+	
+	cout << "Enter Player " << m_token << "'s Name: ";
+	cin >> m_name;
 };
 
 void Player::setMove( int x, int y ){

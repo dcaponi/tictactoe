@@ -11,8 +11,17 @@
 #include "player.h"
 #include <iostream>
 
-Board::Board( int size ){
-    m_size = size;
+Board::Board(){
+	using namespace std;
+	m_size = 0;
+	
+	while ( m_size < 3 ) {
+		cout << "Enter the size of board. Must be larger than 3: ";
+		cin >> m_size;
+		m_size = cin.fail() ? 0 : m_size;
+		cout << endl;
+	}
+	
     board = new char*[ m_size ];
     for( int i = 0; i < m_size; i++ ){
         board[i] = new char[ m_size ];
@@ -30,12 +39,13 @@ int Board::getSize(){
     return m_size;
 }
 
-void Board::update( Player* player ){
+bool Board::update( Player* player ){
     int* move = player -> getLastMove();
     board[move[0]][move[1]] = player -> getToken();
     delete [] move;
+	m_moves++;
     draw();
-    m_moves++;
+	return computeWinner( player );
 }
 
 bool Board::computeWinner( Player* currentPlayer ){
