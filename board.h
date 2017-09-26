@@ -14,14 +14,18 @@
 #include "player.h"
 
 class Board{
-    int size;
-    int moves;
+    int m_size;
+    int m_moves;
+    char* *board;
     
     public:
         Board( int size );
-        void print();
-        void update( Player::Player* player );
-        Player* reportWinner();
+        char getCharacter( int x, int y );
+        int  getSize();
+        void draw();
+        void update( Player* player );
+        void destroyBoard();
+        bool computeWinner( Player* currentPlayer );
     
 };
 

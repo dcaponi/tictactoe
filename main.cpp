@@ -8,13 +8,12 @@
 
 #include <iostream>
 #include "player.h"
+#include "board.h"
 
 using namespace std;
 
-void draw( char** board, int& size );
-void initializePlayers();
-bool move( char** board, Player* player, int& size, int& moves );
-bool evaluateGame( char** board, int& size, int& moves, Player* player, int& x, int& y );
+void takeTurn( Board* board, Player* player );
+bool evaluateGame( Board* board, int& moves, Player* player );
 
 int main(int argc, const char * argv[]) {
     
@@ -26,10 +25,10 @@ int main(int argc, const char * argv[]) {
     
     while( playAgain ){
         int boardSize = 0;
-        int moves = 0;
         string name;
         bool gameOver = false;
         Player* currentPlayer;
+        Board* boardPtr;
         
         cout << "Enter the size of board or any non-integer to quit. Must be larger than 3: ";
         cin >> boardSize;
@@ -49,27 +48,22 @@ int main(int argc, const char * argv[]) {
             cout << endl;
             cout << "Player 1: " << player1.getName() << endl;
             cout << "Player 2: " << player2.getName() << endl;
+            
             currentPlayer = &player1;
             
-            char* *board = new char*[boardSize];
-            for( int i = 0; i < boardSize; i++ ){
-                board[i] = new char[boardSize];
-                for( int j = 0; j < boardSize; j++ ){
-                    board[i][j] = ' ';
-                }
-            }
+            Board gameBoard( boardSize );
+            boardPtr = &gameBoard;
             
-            draw ( board, boardSize );
+            gameBoard.draw();
             
             while( !gameOver ){
-                gameOver = move( board, currentPlayer, boardSize, moves );
+                takeTurn( boardPtr, currentPlayer );
+                gameBoard.update( currentPlayer );
+                gameOver = gameBoard.computeWinner( currentPlayer );
                 currentPlayer = currentPlayer == &player1 ? &player2 : &player1;
             }
         
-            for( int i = 0; i < boardSize; i ++ ){
-                delete [] board[i];
-            }
-            delete [] board;
+            gameBoard.destroyBoard();
             
             char pa;
             cout << "Play again? y/n: ";
@@ -81,79 +75,11 @@ int main(int argc, const char * argv[]) {
     return 0;
 }
 
-void initialziePlayers(){
-    
-}
 
-bool evaluateGame( char** board, int& size, int& moves, Player* player, int& x, int& y ){
-    bool gameOver = false;
-    
-    // Check Row
-    for( int i = 0; i < size; i++ ){
-        if( board[x][i] != player -> getToken() ){
-            break;
-        }
-        if( i == size - 1){
-            cout << player -> getName() << " Wins!\n";
-            gameOver = true;
-        }
-    }
-    // Check Col
-    for( int j = 0; j < size; j++ ){
-        if( board[j][y] != player -> getToken() ){
-            break;
-        }
-        if( j == size - 1){
-            cout << player -> getName() << " Wins!\n";
-            gameOver = true;
-        }
-    }
-    
-    // Check /
-    for( int j = size - 1; j >= 0; j -- ){
-        if( board[(size - 1) - j][j] != player -> getToken() ){
-            break;
-        }
-        if( j == 0 ){
-            cout << player -> getName() << " Wins!\n";
-            gameOver = true;
-        }
-    }
-    
-    // Check "\"
-    for( int i = 0; i < size; i++ ){
-        if( board[i][i] != player -> getToken() ){
-            break;
-        }
-        if( i == size - 1 ){
-            cout << player -> getName() << " Wins!\n";
-            gameOver = true;
-        }
-    }
-    
-    // Check Tie
-    if( moves == (size*size - 1) ){
-        gameOver = true;
-        cout << "Tie Game!" << endl;
-    }
-    return gameOver;
-}
 
-void draw( char** board, int& size ){
-    for( int i = 0; i < size; i++ ){
-        for( int j = 0; j < size; j++ ){
-            cout << " | " << board[i][j];
-            if( j == size - 1 ){
-                cout << " | " ;
-            }
-        }
-        cout << "\n\n";
-    }
-}
-
-bool move( char** board, Player* player, int& size, int& moves ){
+void takeTurn( Board* board, Player* player ){
     bool turnOver = false;
-    int maxEntry = size - 1;
+    int maxEntry = board -> getSize() - 1;
     int x, y;
     
     cout << "Player " << player -> getName() << ", put in (x, y) coords: ";
@@ -166,17 +92,14 @@ bool move( char** board, Player* player, int& size, int& moves ){
             cin >> x >> y;
             cout << endl;
         }
-        else if( board[x][y] != ' ' ){
+        else if( board -> getCharacter( x, y ) != ' ' ){
             cout << "That spot is occupied, please try again: ";
             cin >> x >> y;
             cout << endl;
         }
         else{
-            board[x][y] = player -> getToken();
+            player -> setMove( x, y );
             turnOver = true;
         }
     }
-    moves++;
-    draw( board, size );
-    return evaluateGame( board, size, moves, player, x, y );
 }
