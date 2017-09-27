@@ -20,11 +20,11 @@ class Player{
     int last_y;
     
     public:
-        Player( char const& token );
-        void setMove( int x, int y );
-        int* getLastMove();
-        char getToken();
-        std::string getName();
+        Player(char const& token);
+        void set_move(int x, int y);
+        int* get_last_move();
+        char get_token();
+        std::string get_name();
 };
 
 #endif /* player_h */
