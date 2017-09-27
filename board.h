@@ -17,15 +17,15 @@ class Board{
     int m_size;
     int m_moves;
     char* *board;
-	bool computeWinner( Player* currentPlayer );
+	bool compute_winner(Player* current_player);
     
     public:
         Board();
-        char getCharacter( int x, int y );
-        int  getSize();
+        char get_character(int x, int y);
+        int  get_size();
         void draw();
-        bool update( Player* player );
-        void destroyBoard();
+        bool update(Player* player);
+        void destroy_board();
 };
 
 #endif /* board_h */

@@ -12,25 +12,27 @@
 
 using namespace std;
 
-Player::Player( char const& token ){
+Player::Player(char const& token)
+{
 	m_token = token;
-	
 	cout << "Enter Player " << m_token << "'s Name: ";
 	cin >> m_name;
 };
 
-void Player::setMove( int x, int y ){
-    last_x = x;
+void Player::set_move(int x, int y)
+{
+	last_x = x;
 	last_y = y;
-	};
-
-int* Player::getLastMove(){
-    int* lastMove = new int[2];
-    lastMove[0] = last_x;
-    lastMove[1] = last_y;
-    return lastMove;
 };
 
-char Player::getToken(){ return m_token; };
+int* Player::get_last_move()
+{
+    int* last_move = new int[2];
+    last_move[0] = last_x;
+    last_move[1] = last_y;
+    return last_move;
+};
 
-std::string Player::getName(){ return m_name; };
+char Player::get_token(){ return m_token; };
+
+std::string Player::get_name(){ return m_name; };
