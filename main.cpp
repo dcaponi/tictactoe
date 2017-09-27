@@ -41,8 +41,6 @@ int main() {
 			game_over = game_board.update(current_player);
 			current_player = current_player == &player1 ? &player2 : &player1;
 		}
-	
-		game_board.destroy_board();
 		
 		char pa;
 		cout << "Play again? y/n: ";

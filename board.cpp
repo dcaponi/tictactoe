@@ -143,7 +143,7 @@ void Board::draw()
     }
 }
 
-void Board::destroy_board()
+Board::~Board()
 {
     for(int i = 0; i < m_size; i ++)
 	{
