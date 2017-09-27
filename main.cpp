@@ -12,7 +12,7 @@
 
 using namespace std;
 
-void takeTurn( Board* board, Player* player );
+void take_turn(Board* board, Player* player);
 
 int main() {
     
@@ -20,65 +20,70 @@ int main() {
     //cout << "value of first pointer (row array address) " << *board << " " << board[0] << " Same thing" << endl;
     //cout << "value of first entry " << **board << " " << *board[0] << endl;
     
-    bool playAgain = true;
+    bool play_again = true;
 	
-    while( playAgain ){
-        bool gameOver = false;
+    while(play_again){
+        bool game_over = false;
 		
-		Player player1( 'X' );
-		Player player2( 'O' );
-		Player* currentPlayer = &player1;
-		Board gameBoard;
+		Board game_board;
+		Player player1('X');
+		Player player2('O');
+		Player* current_player = &player1;
 		
-		cout << "Player " << player1.getToken() << ": " << player1.getName() << endl;
-		cout << "Player " << player2.getToken() << ": " << player2.getName() << "\n" << endl;
-		
-		gameBoard.draw();
+		cout << "Player " << player1.get_token() << ": " << player1.get_name() << endl;
+		cout << "Player " << player2.get_token() << ": " << player2.get_name() << "\n" << endl;
+		game_board.draw();
 		
 		// Main game loop
-		while( !gameOver ){
-			takeTurn( &gameBoard, currentPlayer );
-			gameOver = gameBoard.update( currentPlayer );
-			currentPlayer = currentPlayer == &player1 ? &player2 : &player1;
+		while(!game_over)
+		{
+			take_turn(&game_board, current_player);
+			game_over = game_board.update(current_player);
+			current_player = current_player == &player1 ? &player2 : &player1;
 		}
 	
-		gameBoard.destroyBoard();
+		game_board.destroy_board();
 		
 		char pa;
 		cout << "Play again? y/n: ";
 		cin >> pa;
-		cout << ( pa == 'y' ) << endl;
-		playAgain = pa == 'y';
+		cout << (pa == 'y') << endl;
+		play_again = pa == 'y';
     }
     return 0;
 }
 
 
 
-void takeTurn( Board* board, Player* player ){
-    bool turnOver = false;
-    int maxEntry = board -> getSize() - 1;
+void take_turn(Board* board, Player* player)
+{
+    bool turn_over = false;
+    int max_entry = board -> get_size() - 1;
     int x, y;
     
-    cout << "Player " << player -> getName() << ", put in (x, y) coords: ";
+    cout << "Player " << player -> get_name() << ", put in (x, y) coords: ";
     cin >> x >> y;
     cout << endl;
 	
 	// Turn loop
-    while( !turnOver ){
-        if( x > maxEntry || y > maxEntry ){
+    while(!turn_over)
+	{
+        if(x > max_entry || y > max_entry)
+		{
             cout << "That choice is out of bounds, please try again: ";
             cin >> x >> y;
             cout << endl;
         }
-        else if( board -> getCharacter( x, y ) != ' ' ){
+        else if(board -> get_character(x, y) != ' ')
+		{
             cout << "That spot is occupied, please try again: ";
             cin >> x >> y;
             cout << endl;
         }
-        else{
-            player -> setMove( x, y );
-            turnOver = true;
+        else
+		{
+            player -> set_move(x, y);
+            turn_over = true;
         }
     }
 }
