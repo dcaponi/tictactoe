@@ -21,6 +21,7 @@ class Board{
     
     public:
         Board();
+		~Board();
         char get_character(int x, int y);
         int  get_size();
         void draw();
