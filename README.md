@@ -1,7 +1,7 @@
 # tictactoe
 Taught myself come c++ and made this
 
-# To Compile Without VS or XCode
+### To Compile Without VS or XCode
 1) clone the project
 2) cd into the repository
 3) run the command `g++ board.h board.cpp player.h player.cpp main.cpp -o tictactoe` (or use your favorite cpp compiler)
