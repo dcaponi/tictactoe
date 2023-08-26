@@ -27,7 +27,7 @@ void Player::set_move(int x, int y)
 
 int* Player::get_last_move()
 {
-    int* last_move = new int[2];
+    static int last_move[2];
     last_move[0] = last_x;
     last_move[1] = last_y;
     return last_move;
